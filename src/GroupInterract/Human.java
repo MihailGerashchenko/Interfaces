@@ -1,6 +1,10 @@
 package GroupInterract;
 
-public class Human {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Human implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private String lastName;
     private int age;
@@ -56,5 +60,18 @@ public class Human {
                 ", age=" + age +
                 ", gender=" + gender +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Human human = (Human) o;
+        return age == human.age && name.equals(human.name) && lastName.equals(human.lastName) && gender == human.gender;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, lastName, age, gender);
     }
 }

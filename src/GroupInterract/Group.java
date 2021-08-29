@@ -1,10 +1,13 @@
 package GroupInterract;
 
 import javax.swing.*;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 
-public class Group implements Voenkom {
+public class Group implements Voenkom, Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private Student[] students = new Student[10];
 
@@ -111,6 +114,18 @@ public class Group implements Voenkom {
         }
     }
 
+    public static void saveGroupIntoFile(Student[] students) throws IOException {
+        try (PrintStream outWrite = new PrintStream(new FileOutputStream("C:\\Users\\Lenovo\\Desktop\\Group.CSV"))) {
+            for (int i = 0; i < students.length; i++) {
+                if (students[i] != null) {
+                    outWrite.println(students[i]);
+                }
+            }
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+
     @Override
     public String toString() {
         return "Group{" +
@@ -125,9 +140,23 @@ public class Group implements Voenkom {
         for (int i = 0; i < students.length; i++) {
             if (students[i] != null && students[i].getGender() == Gender.MALE && students[i].getAge() >= 18) {
                 warriors[i] = students[i];
-
             }
         }
         return warriors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return name.equals(group.name) && Arrays.equals(students, group.students);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name);
+        result = 31 * result + Arrays.hashCode(students);
+        return result;
     }
 }
